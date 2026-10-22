@@ -6,5 +6,6 @@ export interface CountryConfig { name: string; code: string; currency: string; s
 export class CountryService {
   constructor(private http: HttpClient) {}
   getAll() { return this.http.get<CountryConfig[]>(API_URLS.countries.base); }
+  // updating country code
   updateRate(code: string, rate: number) { return this.http.put<CountryConfig>(API_URLS.countries.byCode(code), { rate }); }
 }
