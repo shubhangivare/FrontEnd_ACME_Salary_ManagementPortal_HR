@@ -1,0 +1,21 @@
+<div class="page-heading"><div><div class="eyebrow">PEOPLE DIRECTORY</div><h1>{{ editing ? 'Edit employee' : 'Add employee' }}</h1><p>Keep employee details accurate and up to date.</p></div><a routerLink="/employees" class="btn btn-secondary">← Back to directory</a></div>
+  <form class="panel form-panel" [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-section-title"><span class="section-number">01</span><div><h2>Personal & employment details</h2><p>Basic information used to identify this employee.</p></div></div>
+    <div class="form-grid">
+      <div class="field"><label for="id">Employee ID *</label><input id="id" formControlName="id" required [readonly]="editing" placeholder="e.g. EMP-1006"></div>
+      <div class="field"><label for="name">Full name *</label><input id="name" formControlName="name" required minlength="2" placeholder="Employee full name"></div>
+      <div class="field"><label for="email">Work email *</label><input id="email" formControlName="email" type="email" required placeholder="name@company.com"></div>
+      <div class="field"><label for="department">Department *</label><select id="department" formControlName="department" required><option value="">Select department</option>@for (d of deptOptions; track d) {<option [value]="d">{{ d }}</option>}</select></div>
+      <div class="field"><label for="designation">Designation *</label><input id="designation" formControlName="designation" required placeholder="Job title"></div>
+      <div class="field"><label for="country">Country *</label><select id="country" formControlName="country" required ><option value="">Select country</option>@for (c of countries; track c.name) {<option [value]="c.name">{{ c.name }}</option>}</select></div>
+      <div class="field"><label for="joined">Joining date *</label><input id="joined" type="date" formControlName="joined" required></div>
+      <div class="field"><label for="status">Employment status</label><select id="status" formControlName="status"><option>Active</option><option>Inactive</option></select></div>
+    </div>
+    <div class="form-section-title form-section-spaced"><span class="section-number">02</span><div><h2>Compensation overview</h2><p>Salary is shown in the employee’s original currency.</p></div></div>
+    <div class="form-grid">
+      <div class="field"><label for="salary">Annual base salary *</label><input id="salary" type="number" min="0" formControlName="salary" required></div>
+      <div class="field"><label for="currency">Currency code</label><input id="currency" formControlName="currency" maxlength="3" required></div>
+    </div>
+    @if (error) { <div class="error-banner">{{ error }}</div> }
+    <div class="form-actions"><a routerLink="/employees" class="btn btn-ghost">Cancel</a><button class="btn btn-primary" type="submit" [disabled]="form.invalid || loading">Save employee <span>→</span></button></div>
+  </form>

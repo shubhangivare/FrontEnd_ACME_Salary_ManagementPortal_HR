@@ -1,0 +1,29 @@
+<div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">P</span><div><strong>PeoplePay</strong><small>HR management</small></div></div>
+      <div class="nav-label">WORKSPACE</div>
+      <nav>
+        <a routerLink="/dashboard" routerLinkActive="active"><span>▦</span> Dashboard</a>
+        <a routerLink="/employees" routerLinkActive="active"><span>♙</span> Employees</a>
+        @if (canManage()) {
+          <a routerLink="/salary" routerLinkActive="active"><span>₹</span> Compensation</a>
+          <a routerLink="/import-export" routerLinkActive="active"><span>⇅</span> Import / Export</a>
+        }
+        @if (isAdmin()) {
+          <a routerLink="/countries" routerLinkActive="active"><span>◎</span> Countries & currency</a>
+          <a routerLink="/audit" routerLinkActive="active"><span>≡</span> Audit trail</a>
+        }
+        <div class="nav-label nav-label-lower">SUPPORT</div>
+        <a routerLink="/help" routerLinkActive="active"><span>?</span> Help & chatbot</a>
+      </nav>
+      <div class="sidebar-bottom"><div class="secure-dot"></div><div><strong>Connected environment</strong><small>H2-backed API</small></div></div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar">
+        <div><div class="eyebrow">PEOPLE OPERATIONS</div><div class="top-title">Salary Management</div></div>
+        <div class="top-actions"><span class="status-pill"><span></span> System online</span><div class="user-avatar">{{ initials() }}</div><div class="user-meta"><strong>{{ auth.user()?.displayName }}</strong><small>{{ auth.user()?.role }}</small></div><button class="btn btn-ghost btn-small" (click)="auth.logout()">Log out ↗</button></div>
+      </header>
+      <section class="page-content"><router-outlet /></section>
+      <footer>PeoplePay <span>•</span> Internal HR workspace <span class="footer-right">V1.0 · Spring Boot API</span></footer>
+    </main>
+  </div>

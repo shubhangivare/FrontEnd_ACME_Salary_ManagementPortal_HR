@@ -1,0 +1,142 @@
+<div class="page-heading">
+  <div>
+    <div class="eyebrow">PEOPLE DIRECTORY</div>
+    <h1>Employees</h1>
+    <p>Manage employee records, status, and workforce information.</p>
+  </div>
+  @if (canManage()) { <a routerLink="/employees/new" class="btn btn-primary">＋ Add employee</a> }
+</div>
+<section class="panel">
+  <form class="directory-toolbar" [formGroup]="filters" (ngSubmit)="refresh()">
+    <div class="search-box"><span>⌕</span><input formControlName="search" placeholder="Search name, ID, department…"
+        aria-label="Search employees"></div>
+    <select formControlName="department" aria-label="Filter department">
+      <option value="">All departments</option>@for (d of departments; track d) {<option [value]="d">{{ d }}</option>}
+    </select>
+   <select class="form-select" formControlName="country">
+    <option value="">All Countries</option>
+    <option *ngFor="let country of countries" [value]="country">
+      {{ country }}
+    </option>
+  </select>
+    <select formControlName="status" aria-label="Filter status">
+      <option value="">All statuses</option>
+      <option>Active</option>
+      <option>Inactive</option>
+    </select>
+    <!-- <select formControlName="sortBy" aria-label="Sort employees">
+      <option value="name">Sort: Name</option>
+      <option value="salary">Sort: Salary</option>
+      <option value="joined">Sort: Join date</option>
+    </select> -->
+     @if (canManage()) {
+    <button
+      class="btn btn-primary btn-small"
+      type="button"
+      (click)="downloadExcel()"
+      [disabled]="filtered().length === 0"
+      title="Download filtered employee records as Excel"
+    >
+      ↓ Download Excel
+    </button>
+  }
+  </form>
+  <div class="table-meta"><span><strong>{{ filtered().length }}</strong> employees found</span><button
+      class="btn btn-ghost btn-small" (click)="clearFilters()">Clear filters</button></div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>EMPLOYEE</th>
+          <th>DEPARTMENT / ROLE</th>
+          <th>COUNTRY</th>
+          <th>ANNUAL SALARY</th>
+          <th>STATUS</th>
+          <th>ACTIONS</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (e of filtered(); track e.id) {
+        <tr>
+          <td>
+            <div class="person-cell">
+              <div class="person-avatar">{{ initials(e.name) }}</div>
+              <div><strong>{{ e.name }}</strong><small>{{ e.id }} · {{ e.email }}</small></div>
+            </div>
+          </td>
+          <td><strong class="normal-weight">{{ e.department }}</strong><small class="cell-sub">{{ e.designation
+              }}</small></td>
+          <td>{{ e.country }}</td>
+          <td><strong class="normal-weight">{{ e.salary | number:'1.0-0' }} {{ e.currency }}</strong></td>
+          <td><span class="tag" [class.tag-green]="e.status === 'Active'" [class.tag-gray]="e.status !== 'Active'">{{
+              e.status }}</span></td>
+          <td>
+            <div class="action-row">@if (canManage()) {<a [routerLink]="['/employees', e.id, 'edit']"
+                class="table-action">Edit</a>@if (e.status === 'Active') {<button class="table-action danger-text"
+                (click)="deactivate(e.id)">Deactivate</button>}}</div>
+          </td>
+        </tr>
+        } @empty { <tr>
+          <td colspan="6" class="empty-state">No employees match your filters. Try changing your search.</td>
+        </tr> }
+      </tbody>
+    </table>
+  </div>
+  <div class="table-bottom"><span>Showing {{ filtered().length }} of {{ employees().length }}
+      records</span><span>Pagination can be connected to API for larger datasets</span></div>
+</section>
+<div class="notice"><span>ⓘ</span>
+  <div><strong>Access control</strong>
+    <p>Salary visibility should be enforced by the API as well as the UI in a production deployment.</p>
+  </div>
+</div> 
+
+<!-- 
+<form class="directory-toolbar" [formGroup]="filters">
+  <div class="search-box">
+    <span>⌕</span>
+    <input
+      formControlName="search"
+      placeholder="Search name, ID, department…"
+      aria-label="Search employees"
+    />
+  </div>
+
+  <select formControlName="department" aria-label="Filter department">
+    <option value="">All departments</option>
+    @for (d of departments; track d) {
+      <option [value]="d">{{ d }}</option>
+    }
+  </select>
+
+  <select class="form-select" formControlName="country" aria-label="Filter country">
+    <option value="">All Countries</option>
+    @for (country of countries; track country) {
+      <option [value]="country">{{ country }}</option>
+    }
+  </select>
+
+  <select formControlName="status" aria-label="Filter status">
+    <option value="">All statuses</option>
+    <option value="Active">Active</option>
+    <option value="Inactive">Inactive</option>
+  </select>
+
+  <select formControlName="sortBy" aria-label="Sort employees">
+    <option value="name">Sort: Name</option>
+    <option value="salary">Sort: Salary</option>
+    <option value="joined">Sort: Join date</option>
+  </select>
+
+  @if (canManage()) {
+    <button
+      class="btn btn-primary btn-small"
+      type="button"
+      (click)="downloadExcel()"
+      [disabled]="filtered().length === 0"
+      title="Download filtered employee records as Excel"
+    >
+      ↓ Download Excel
+    </button>
+  }
+</form> -->

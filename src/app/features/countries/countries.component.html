@@ -1,0 +1,60 @@
+<div class="page-heading">
+  <div>
+    <div class="eyebrow">GLOBAL WORKFORCE</div>
+    <h1>Countries & currency</h1>
+    <p>Maintain supported countries, ISO currency codes, and illustrative exchange rates.</p>
+  </div><button class="btn btn-primary" (click)="addCountry()">＋ Add country</button>
+</div>
+<div class="notice"><span>ⓘ</span>
+  <div><strong>Exchange-rate disclaimer</strong>
+    <p>Rates below are illustrative demo values only, not live market rates. Production should use an approved, dated
+      rate feed and retain source, timestamp, and rate type.</p>
+  </div>
+</div>
+<section class="panel">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>COUNTRY</th>
+          <th>COUNTRY CODE</th>
+          <th>CURRENCY</th>
+          <th>SYMBOL</th>
+          <th>DEMO RATE TO INR</th>
+          <th>RATE DATE</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (c of countries(); track c.code) {<tr>
+          <td><strong>{{ c.name }}</strong></td>
+          <td><span class="tag tag-gray">{{ c.code }}</span></td>
+          <td>{{ c.currency }}</td>
+          <td>{{ c.symbol }}</td>
+          <td><input class="rate-input" type="number" min="0" step="0.01" [value]="c.rate" #rateInput
+              (change)="updateRate(c.code, +rateInput.value)" [attr.aria-label]="'Demo exchange rate for ' + c.name">
+          </td>
+          <td>{{ c.updated }}</td>
+        </tr>}
+      </tbody>
+    </table>
+  </div>
+</section>
+<section class="panel converter">
+  <div class="panel-header">
+    <div>
+      <h2>Currency converter</h2>
+      <p>Illustrative calculation using rates above. INR equivalent = amount × rate.</p>
+    </div>
+  </div>
+  <form class="converter-row" [formGroup]="converter">
+    <div class="field"><label for="amount">Amount</label><input id="amount" type="number" min="0"
+        formControlName="amount"></div>
+    <div class="field"><label for="countryCurrency">Currency</label><select id="countryCurrency"
+        formControlName="currency">
+        <option value="INR">INR</option>@for (c of countries(); track c.code) { @if (c.currency !== 'INR') {<option
+          [value]="c.currency">{{ c.currency }} · {{ c.name }}</option>} }
+      </select></div>
+    <div class="conversion-result"><span>Estimated INR equivalent</span><strong>₹ {{ equivalent() | number:'1.2-2'
+        }}</strong></div>
+  </form>
+</section>

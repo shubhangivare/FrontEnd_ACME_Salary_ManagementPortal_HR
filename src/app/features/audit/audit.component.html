@@ -1,0 +1,8 @@
+<div class="page-heading"><div><div class="eyebrow">GOVERNANCE & COMPLIANCE</div><h1>Audit trail</h1><p>Review changes made in this browser demo, including salary changes and data operations.</p></div><button class="btn btn-secondary" (click)="exportAudit()">Export log ↓</button></div>
+  <div class="notice"><span>ⓘ</span><div><strong>Production requirement</strong><p>Client-side logs can be changed or deleted. For compliance, record immutable audit events on the server with authenticated identity, timestamp, action, entity ID, and controlled before/after values.</p></div></div>
+  <section class="panel"><form class="directory-toolbar" [formGroup]="filters"><div class="search-box"><span>⌕</span><input formControlName="search" placeholder="Search actions, users, details…"></div><select formControlName="action"><option value="">All actions</option>@for (a of actions(); track a) {<option [value]="a">{{ a }}</option>}</select></form>
+    <div class="table-meta"><span><strong>{{ filtered().length }}</strong> events</span><button class="btn btn-ghost btn-small" (click)="clear()">Clear filters</button></div>
+    <div class="table-wrap"><table><thead><tr><th>TIMESTAMP</th><th>USER</th><th>ACTION</th><th>DETAILS</th></tr></thead><tbody>
+    @for (entry of filtered(); track entry.at + entry.action + entry.detail) {<tr><td>{{ entry.at | date:'medium' }}</td><td>{{ entry.user }}</td><td><span class="tag tag-gray">{{ entry.action }}</span></td><td>{{ entry.detail }}</td></tr>} @empty {<tr><td colspan="4" class="empty-state">No audit events found.</td></tr>}
+    </tbody></table></div>
+  </section>

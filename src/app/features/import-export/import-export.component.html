@@ -1,0 +1,65 @@
+<div class="page-heading">
+  <div>
+    <div class="eyebrow">DATA OPERATIONS</div>
+    <h1>Import & export</h1>
+    <p>Move employee records in bulk with a clear preview and validation summary.</p>
+  </div>
+</div>
+<div class="import-grid">
+  <!-- <section class="panel import-card">
+    <div class="import-icon blue">⇧</div>
+    <h2>Import employees</h2>
+    <p>Upload a CSV file, review mapped columns, validate required fields, and import valid rows.</p>
+    <div class="upload-zone">
+      <div class="upload-symbol">↑</div><strong>Choose a CSV file</strong><small>Supported: .csv · UTF-8
+        recommended</small><input type="file" accept=".csv,text/csv" (change)="onFile($event)"
+        aria-label="Choose CSV file">
+    </div>
+    <button class="btn btn-secondary full-btn" (click)="downloadTemplate()">Download CSV template</button>
+    @if (fileName()) {<div class="file-info"><span>▤</span>
+      <div><strong>{{ fileName() }}</strong><small>{{ parsed().length }} data rows detected</small></div>
+    </div>}
+    @if (errors().length) {<div class="validation-box"><strong>{{ errors().length }} validation issue(s)</strong>@for
+      (err of errors().slice(0, 8); track err) {<small>• {{ err }}</small>}</div>}
+    @if (parsed().length) {<div class="preview-title"><strong>Preview</strong><span>{{ validRows().length }} valid · {{
+        errors().length }} issues</span></div>
+    <div class="preview-table">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Salary</th>
+          </tr>
+        </thead>
+        <tbody>@for (r of parsed().slice(0, 5); track r.id) {<tr>
+            <td>{{ r.id }}</td>
+            <td>{{ r.name }}</td>
+            <td>{{ r.department }}</td>
+            <td>{{ r.salary }} {{ r.currency }}</td>
+          </tr>}</tbody>
+      </table>
+    </div><button class="btn btn-primary full-btn" [disabled]="!validRows().length" (click)="importRows()">Import {{
+      validRows().length }} valid row(s)</button>}
+  </section> -->
+  <section class="panel import-card">
+    <div class="import-icon green-bg">⇩</div>
+    <h2>Export employee data</h2>
+    <p>Export current directory data to CSV. Only export information you are authorized to access.</p>
+    <div class="export-summary">
+      <div><span>Records available</span><strong>{{ employees().length }}</strong></div>
+      <div><span>Export format</span><strong>CSV / Excel-compatible</strong></div>
+      <div><span>Included fields</span><strong>Employee + salary data</strong></div>
+    </div>
+    <button class="btn btn-primary full-btn" (click)="exportCsv()">Export all employees ↓</button>
+    <p class="small-muted">CSV opens in Excel. For true .xlsx files, server-side report generation or a vetted
+      spreadsheet library can be added.</p>
+  </section>
+</div>
+<div class="notice"><span>ⓘ</span>
+  <div><strong>Safe import behaviour</strong>
+    <p>Rows with missing required fields, invalid salary values, duplicate IDs, or duplicate emails are rejected.
+      Validate again on the server before production import.</p>
+  </div>
+</div>

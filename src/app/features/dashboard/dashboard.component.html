@@ -1,0 +1,216 @@
+<!-- <div class="page-heading"><div><div class="eyebrow">OVERVIEW</div><h1>Good day, {{ firstName() }} <span class="wave">✦</span></h1><p>Here’s what’s happening across your workforce today.</p></div><a routerLink="/employees" class="btn btn-primary">View employees <span>→</span></a></div>
+  <div class="stat-grid">
+    <article class="stat-card"><div class="stat-top"><span>Total employees</span><span class="stat-icon blue">♙</span></div><div class="stat-number">{{ employees().length }}</div><div class="stat-foot"><span class="mini-dot green"></span> Employee records in workspace</div></article>
+    <article class="stat-card"><div class="stat-top"><span>Active workforce</span><span class="stat-icon green-bg">✓</span></div><div class="stat-number">{{ activeCount() }}</div><div class="stat-foot"><span class="positive">Active</span> employees</div></article>
+    <article class="stat-card"><div class="stat-top"><span>Departments</span><span class="stat-icon violet">▦</span></div><div class="stat-number">{{ departmentCount() }}</div><div class="stat-foot">Across current employee records</div></article>
+    <article class="stat-card"><div class="stat-top"><span>Countries covered</span><span class="stat-icon amber">◎</span></div><div class="stat-number">{{ countryCount() }}</div><div class="stat-foot">Multi-currency workforce</div></article>
+  </div>
+  <div class="dashboard-grid">
+    <section class="panel"><div class="panel-header"><div><h2>Recently added employees</h2><p>Latest records in your directory</p></div><a routerLink="/employees" class="text-link">View all →</a></div>
+      <div class="table-wrap"><table><thead><tr><th>EMPLOYEE</th><th>DEPARTMENT</th><th>COUNTRY</th><th>STATUS</th></tr></thead><tbody>
+      @for (e of employees().slice(0, 4); track e.id) { <tr><td><div class="person-cell"><div class="person-avatar">{{ initials(e.name) }}</div><div><strong>{{ e.name }}</strong><small>{{ e.id }}</small></div></div></td><td>{{ e.department }}</td><td>{{ e.country }}</td><td><span class="tag" [class.tag-green]="e.status === 'Active'" [class.tag-gray]="e.status !== 'Active'">{{ e.status }}</span></td></tr> }
+      </tbody></table></div>
+    </section>
+    <section class="panel quick-panel"><div class="panel-header"><div><h2>Quick actions</h2><p>Common HR workflows</p></div></div>
+      <a routerLink="/employees/new" class="quick-action"><span class="quick-icon blue">＋</span><span><strong>Add employee</strong><small>Create a new employee record</small></span><b>→</b></a>
+      <a routerLink="/salary" class="quick-action"><span class="quick-icon violet">₹</span><span><strong>Manage compensation</strong><small>Review salary and pay history</small></span><b>→</b></a>
+      <a routerLink="/import-export" class="quick-action"><span class="quick-icon green-bg">⇅</span><span><strong>Import / export</strong><small>Move employee data in bulk</small></span><b>→</b></a>
+      <a routerLink="/help" class="quick-action"><span class="quick-icon amber">?</span><span><strong>Help centre</strong><small>FAQs and assistant</small></span><b>→</b></a>
+    </section>
+  </div>
+  <div class="notice"><span>ⓘ</span><div><strong>Demo data notice</strong><p>Employee and compensation records are loaded from the secured Spring Boot API and H2 database.</p></div></div> -->
+
+
+
+<!-- v3 -->
+
+
+
+
+<div class="dashboard">
+
+  <!-- Header and Quick Actions -->
+  <header class="page-heading dashboard-heading">
+    <div>
+      <div class="eyebrow">PEOPLEPAY / WORKFORCE ANALYTICS</div>
+      <h1>Good day, {{ firstName() }} <span class="wave">✦</span></h1>
+      <p>Here’s your workforce overview at a glance.</p>
+    </div>
+
+    <nav class="top-quick-actions" aria-label="Quick actions">
+      <a routerLink="/employees" class="top-action" title="View employees">
+        <span class="top-action-icon blue">♙</span>
+        <span>Employees</span>
+      </a>
+
+      <a routerLink="/employees/new" class="top-action" title="Add employee">
+        <span class="top-action-icon green-bg">＋</span>
+        <span>Add employee</span>
+      </a>
+
+      <a routerLink="/salary" class="top-action" title="Manage compensation">
+        <span class="top-action-icon violet">₹</span>
+        <span>Compensation</span>
+      </a>
+
+      <a routerLink="/import-export" class="top-action" title="Import or export">
+        <span class="top-action-icon amber">⇅</span>
+        <span>Import / Export</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- KPI Cards -->
+  <section class="stat-grid">
+    <article class="stat-card">
+      <div class="stat-top">
+        <span>Total employees</span>
+        <span class="stat-icon blue">♙</span>
+      </div>
+      <div class="stat-number">{{ employees().length }}</div>
+      <div class="stat-foot">All employee records</div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-top">
+        <span>Active workforce</span>
+        <span class="stat-icon green-bg">✓</span>
+      </div>
+      <div class="stat-number">{{ activeCount() }}</div>
+      <div class="stat-foot">
+        <span class="positive">{{ activePercentage() }}%</span>
+        of total workforce
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-top">
+        <span>Departments</span>
+        <span class="stat-icon violet">▦</span>
+      </div>
+      <div class="stat-number">{{ departmentCount() }}</div>
+      <div class="stat-foot">Across the organization</div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-top">
+        <span>Countries covered</span>
+        <span class="stat-icon amber">◎</span>
+      </div>
+      <div class="stat-number">{{ countryCount() }}</div>
+      <div class="stat-foot">Global workforce footprint</div>
+    </article>
+  </section>
+
+  <!-- Analytics Charts -->
+  <section class="analytics-grid">
+
+    <!-- Department Distribution -->
+    <article class="panel chart-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Department distribution</h2>
+          <p>Employees across departments</p>
+        </div>
+        <span class="chart-label">BY HEADCOUNT</span>
+      </div>
+
+      @if (departmentStats().length > 0) {
+        <div class="department-chart">
+          @for (item of departmentStats(); track item.name) {
+            <div class="bar-item">
+              <div class="bar-heading">
+                <span>{{ item.name }}</span>
+                <strong>
+                  {{ item.count }}
+                  <small>({{ item.percentage }}%)</small>
+                </strong>
+              </div>
+
+              <div
+                class="bar-track"
+                role="progressbar"
+                [attr.aria-label]="item.name + ' employees'"
+                [attr.aria-valuenow]="item.percentage"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+                <div
+                  class="bar-fill"
+                  [style.width.%]="item.percentage"
+                  [style.background]="item.color"
+                ></div>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-chart">No department data available yet.</div>
+      }
+    </article>
+
+    <!-- Workforce Status -->
+    <article class="panel chart-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Workforce status</h2>
+          <p>Active and inactive employees</p>
+        </div>
+        <span class="chart-label">BY STATUS</span>
+      </div>
+
+      <div class="status-chart">
+        <div
+          class="donut-chart"
+          [style.background]="statusChartBackground()"
+          role="img"
+          [attr.aria-label]="
+            activeCount() + ' active and ' +
+            inactiveCount() + ' inactive employees'
+          "
+        >
+          <div class="donut-hole">
+            <strong>{{ activePercentage() }}%</strong>
+            <span>Active</span>
+          </div>
+        </div>
+
+        <div class="status-legend">
+          <div class="legend-item">
+            <span class="legend-dot active-dot"></span>
+            <div>
+              <span>Active</span>
+              <strong>{{ activeCount() }}</strong>
+            </div>
+          </div>
+
+          <div class="legend-item">
+            <span class="legend-dot inactive-dot"></span>
+            <div>
+              <span>Inactive</span>
+              <strong>{{ inactiveCount() }}</strong>
+            </div>
+          </div>
+
+          <div class="legend-total">
+            <span>Total workforce</span>
+            <strong>{{ employees().length }}</strong>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- Data Notice -->
+  <div class="notice">
+    <span>ⓘ</span>
+    <div>
+      <strong>Live workforce overview</strong>
+      <p>
+        Dashboard metrics and charts are calculated from employee
+        records loaded through the Spring Boot API.
+      </p>
+    </div>
+  </div>
+
+</div>

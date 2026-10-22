@@ -1,0 +1,207 @@
+
+<div class="page-heading">
+  <div>
+    <div class="eyebrow">ACME HR INTELLIGENCE</div>
+    <h1>Help &amp; Salary Insights</h1>
+    <p>
+      Explore compensation and workforce insights across
+      ACME departments and countries.
+    </p>
+  </div>
+</div>
+
+<div class="help-grid">
+
+  <section class="panel faq-panel">
+    <div class="panel-header">
+      <div>
+        <h2>HR Knowledge Centre</h2>
+        <p>Guidance for common HR workflows</p>
+      </div>
+    </div>
+
+    <div class="faq-list">
+      <details
+        *ngFor="let faq of faqs; let i = index"
+        [open]="i === 0">
+        <summary>{{ faq.q }}</summary>
+        <p>{{ faq.a }}</p>
+      </details>
+    </div>
+
+    <div class="language-setting">
+      <div>
+        <strong>Display language</strong>
+        <small>Choose your preferred language</small>
+      </div>
+
+      <select
+        name="language"
+        [(ngModel)]="language"
+        aria-label="Display language">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी (preview)</option>
+        <option value="it">Italiano (preview)</option>
+      </select>
+    </div>
+
+    <p class="small-muted">
+      Language selection is a demonstration. Full translation
+      requires localized text and formatting.
+    </p>
+
+    <div class="faq-tip">
+      <strong>HR tip</strong>
+      <p>
+        Use salary insights to compare compensation across
+        countries, departments and job levels.
+      </p>
+    </div>
+  </section>
+
+  <section class="panel chatbot-panel">
+
+    <div class="chat-header">
+      <div class="chat-bot-avatar">✦</div>
+
+      <div class="chat-title">
+        <strong>PeoplePay Intelligence</strong>
+        <small>
+          <span class="mini-dot green"></span>
+          HR Salary Assistant · Demo
+        </small>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-ghost btn-small"
+        (click)="clearChat()"
+        [disabled]="isLoading">
+        New chat
+      </button>
+    </div>
+
+    <div
+      class="chat-messages"
+      aria-live="polite"
+      aria-relevant="additions">
+
+      <div
+        *ngFor="let message of messages"
+        class="chat-message"
+        [class.chat-user]="message.from === 'user'"
+        [class.chat-assistant]="message.from === 'assistant'">
+
+        <div class="chat-message-label">
+          {{ message.from === 'user' ? 'You' : 'PeoplePay Assistant' }}
+        </div>
+
+        <div class="chat-bubble">
+          {{ message.text }}
+        </div>
+      </div>
+
+      <div
+        *ngIf="isLoading"
+        class="chat-message chat-assistant">
+        <div class="chat-message-label">PeoplePay Assistant</div>
+        <div class="chat-bubble">Preparing your response...</div>
+      </div>
+    </div>
+
+    <div class="suggested-questions">
+      <strong>Explore salary data</strong>
+
+      <div class="suggestion-list">
+        <button
+          type="button"
+          class="suggestion-chip"
+          [disabled]="isLoading"
+          (click)="askPrompt('What is the average and median salary across ACME?')">
+          Average and median salary
+        </button>
+
+        <button
+          type="button"
+          class="suggestion-chip"
+          [disabled]="isLoading"
+          (click)="askPrompt('Compare salaries across countries.')">
+          Compare countries
+        </button>
+
+        <button
+          type="button"
+          class="suggestion-chip"
+          [disabled]="isLoading"
+          (click)="askPrompt('Which departments have the highest average salaries?')">
+          Department comparison
+        </button>
+
+        <button
+          type="button"
+          class="suggestion-chip"
+          [disabled]="isLoading"
+          (click)="askPrompt('Show salary ranges by job title and seniority.')">
+          Salary by job level
+        </button>
+
+        <button
+          type="button"
+          class="suggestion-chip"
+          [disabled]="isLoading"
+          (click)="askPrompt('Identify potential pay equity gaps.')">
+          Pay equity
+        </button>
+
+        <button
+          type="button"
+          class="suggestion-chip"
+          [disabled]="isLoading"
+          (click)="askPrompt('Summarize annual salary expenditure by country.')">
+          Salary expenditure
+        </button>
+
+        <button
+          type="button"
+          class="suggestion-chip"
+          [disabled]="isLoading"
+          (click)="askPrompt('How many employees are in each department?')">
+          Employee distribution
+        </button>
+
+        <button
+          type="button"
+          class="suggestion-chip"
+          [disabled]="isLoading"
+          (click)="askPrompt('How can HR manage salary records?')">
+          Salary management
+        </button>
+      </div>
+    </div>
+
+    <form class="chat-compose" (ngSubmit)="send()">
+      <input
+        type="text"
+        name="question"
+        [(ngModel)]="question"
+        placeholder="Ask about salaries, countries or departments..."
+        aria-label="Ask PeoplePay a question"
+        autocomplete="off"
+        maxlength="500"
+        [disabled]="isLoading" />
+
+      <button
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="!question.trim() || isLoading">
+        {{ isLoading ? 'Please wait...' : 'Send ↑' }}
+      </button>
+    </form>
+
+    <p class="small-muted chat-disclaimer">
+      Demo responses do not use live ACME data.
+      Protect confidential employee information.
+    </p>
+
+  </section>
+</div>

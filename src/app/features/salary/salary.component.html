@@ -1,0 +1,23 @@
+<div class="page-heading"><div><div class="eyebrow">PAY & REWARDS</div><h1>Compensation management</h1><p>Review base salary and record a dated compensation revision.</p></div></div>
+  <div class="stat-grid stat-grid-three">
+    <article class="stat-card"><div class="stat-top"><span>Active salary records</span><span class="stat-icon blue">₹</span></div><div class="stat-number">{{ activeCount() }}</div><div class="stat-foot">Active employees only</div></article>
+    <article class="stat-card"><div class="stat-top"><span>India annual payroll</span><span class="stat-icon green-bg">↗</span></div><div class="stat-number">{{ indiaPayroll() | number:'1.0-0' }} <small>INR</small></div><div class="stat-foot">Sample records · base salary only</div></article>
+    <article class="stat-card"><div class="stat-top"><span>Compensation history</span><span class="stat-icon violet">≡</span></div><div class="stat-number">{{ history().length }}</div><div class="stat-foot">Revisions recorded in this browser</div></article>
+  </div>
+  <section class="panel"><div class="panel-header"><div><h2>Salary register</h2><p>Original currency retained for each employee.</p></div><form [formGroup]="searchForm"><input class="compact-search" formControlName="search" placeholder="Search employees…" aria-label="Search employees"></form></div>
+    <div class="table-wrap"><table><thead><tr><th>EMPLOYEE</th><th>COUNTRY</th><th>BASE SALARY / YEAR</th><th>REVISION</th></tr></thead><tbody>
+    @for (e of filtered(); track e.id) {<tr><td><div class="person-cell"><div class="person-avatar">{{ initials(e.name) }}</div><div><strong>{{ e.name }}</strong><small>{{ e.id }}</small></div></div></td><td>{{ e.country }}</td><td><strong>{{ e.salary | number:'1.0-0' }} {{ e.currency }}</strong></td><td><button class="btn btn-secondary btn-small" (click)="openRevision(e.id)">＋ Revise salary</button></td></tr>}
+    </tbody></table></div>
+  </section>
+  @if (selectedId()) { <div class="modal-backdrop"><form class="modal-card" [formGroup]="revisionForm" (ngSubmit)="saveRevision()"><div class="panel-header"><div><h2>Salary revision</h2><p>{{ selectedEmployee()?.name }} · {{ selectedEmployee()?.id }}</p></div><button type="button" class="icon-button" (click)="selectedId.set('')">×</button></div>
+    <div class="revision-current"><span>Current annual base</span><strong>{{ selectedEmployee()?.salary | number:'1.0-0' }} {{ selectedEmployee()?.currency }}</strong></div>
+    <div class="field"><label for="newSalary">New annual base salary *</label><input id="newSalary" type="number" min="0" formControlName="newSalary"></div>
+    <div class="field"><label for="effectiveDate">Effective date *</label><input id="effectiveDate" type="date" formControlName="effectiveDate"></div>
+    <div class="field"><label for="reason">Reason for change *</label><textarea id="reason" formControlName="reason" placeholder="Promotion, annual review, role change…"></textarea></div>
+    @if (error) { <div class="error-banner">{{ error }}</div> }<div class="form-actions"><button type="button" class="btn btn-ghost" (click)="selectedId.set('')">Cancel</button><button type="submit" class="btn btn-primary" [disabled]="revisionForm.invalid || saving()">Save revision</button></div>
+  </form></div> }
+  <section class="panel history-panel"><div class="panel-header"><div><h2>Recent revisions</h2><p>Audit-style change history (demo storage).</p></div></div>
+    <div class="table-wrap"><table><thead><tr><th>DATE</th><th>EMPLOYEE ID</th><th>PREVIOUS</th><th>NEW</th><th>REASON</th><th>CHANGED BY</th></tr></thead><tbody>
+    @for (h of history(); track h.id) {<tr><td>{{ h.effectiveDate }}</td><td>{{ h.employeeId }}</td><td>{{ h.oldSalary | number:'1.0-0' }} {{ h.currency }}</td><td><strong>{{ h.newSalary | number:'1.0-0' }} {{ h.currency }}</strong></td><td>{{ h.reason }}</td><td>{{ h.user }}</td></tr>} @empty {<tr><td colspan="6" class="empty-state">No salary revisions recorded yet.</td></tr>}
+    </tbody></table></div>
+  </section>
